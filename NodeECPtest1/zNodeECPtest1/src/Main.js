@@ -1,7 +1,7 @@
 /*	Created on Dec 16, 2016
  *
  *	@file: Main.js
- *	@author: dsalex1
+ *	@author: dsalex1 
  *	@version: alpha 0.2.4-0201
  *  @snapshot: false
  *  @autoincrement: true
