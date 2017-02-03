@@ -1,0 +1,48 @@
+<div class="plan container">
+	<div class="plan header">
+ 		{{ plan['Titel']['Inhalt']}}
+	</div>
+	
+	<div class="plan absents" ng-hide="plan['Abwesenheiten'].length===0">
+		<b>Abwesenheiten</b></br>
+		<span ng-repeat="absent in plan['Abwesenheiten'] | filter:{$:planctrl.filter}:FilterFunction">{{absent['Kuerzel']}}{{absent['Anmerkung']==="" ? "" : " "+absent['Anmerkung']}}{{$last ? '' : ', '}} </span>
+	</div>
+	
+	<div class="planExchangeHeader">
+		<table class="table" cellspacing="0" >
+		</table>
+	</div>
+	
+	<div class="plan exchanges scrollable" id="scroll1">
+	    <div class="scrollContainer" >
+			<div class="scrollClones">
+			    <div class="scrollContent">
+					<table class="table" cellspacing="0" >
+						<tr class="headline"> <td class="rowStunde">Stunde</td><td class="rowKlasse">Klasse</td><td class="rowFach">Fach</td><td class="rowLeher">Lehrer</td><td class="rowVertretung">Vertretung </td><td class="rowRaum">Raum</td><td class="rowAnmerkung">Anmerkung</td> </tr> 
+						
+						<tr ng-repeat="exch in plan['Vertretungen'] | filter:{$:planctrl.filter}:FilterFunction as results" 
+							  style="{{exch['Style']['backgroundcolor'] | JSONColToCSS:($index %2===0)}}">
+							<td class="rowStunde">{{exch['StundeNeu']}}</td>
+							<td class="rowKlasse">{{exch['KlasseNeu']}}</td>
+							<td class="rowFach">{{exch['FachNeu']}}</td>
+							<td class="rowLehrer">{{exch['LehrerNeu']}}</td>
+							<td class="rowVertretung">{{exch['VertretungNeu']}}</td>
+							<td class="rowRaum">{{exch['RaumNeu']}}</td>
+							<td class="rowAnmerkung">{{exch['AnmerkungNeu']}}</td> 
+						</tr>
+						
+						<tr ng-if="results.length === 0"><td class="rowStunde">-</td><td class="rowKlasse">-</td><td class="rowFach">-</td><td class="rowLeher">-</td><td class="rowVertretung">-</td><td class="rowRaum">-</td><td class="rowAnmerkung">-</td> </tr>
+						
+						<!-- add emty row-->
+						<tr style="height:0px;"><td class="rowStunde"></td><td class="rowKlasse"></td><td class="rowFach"></td><td class="rowLeher"></td><td class="rowVertretung"></td><td class="rowRaum"></td><td class="rowAnmerkung"></td> </tr>
+					</table>
+			    </div>
+			</div>
+	    </div>
+	</div>
+ 
+	<div class="plan annot" ng-hide="plan['PlanZusatz'].length===0">
+		<p class="annot element" style="{{annot['Style']['backgroundcolor'] | JSONColToCSS:($index %2===0)}}" ng-repeat="annot in plan['PlanZusatz']  | filter:{$:planctrl.filter}:FilterFunction">{{annot['Inhalt']}}</p>
+	</div>
+</div>
+

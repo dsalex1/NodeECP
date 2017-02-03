@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+	    <title>ECP Test file</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+	</head>
+	<body ng-app="myApp">
+
+		<div id="test" class="row header">
+			<div class="state" ng-controller="myCtrl">
+				'{{state}}'
+			</div>
+		</div>
+
+		<script>
+			/*var app = angular.module("myApp", []);
+				app.controller("myCtrl", function($scope) {
+					$scope.state = "John";
+					$scope.lastName = "Doe";
+				});*/
+			var app = angular.module('myApp', []);
+		    var jsonData = null;
+			getjsonData=function(){
+			return jsonData;
+			}
+			app.controller('myCtrl', function($scope){
+					$scope.state = getjsonData();
+					//console.log(this.data['Titel']['Inhalt']);
+			});		
+			$.getJSON("./testData2.json",function(json){
+				angular.element("#test").scope()
+				jsonData=json[0];
+			});
+
+		</script>
+
+	</body>
+</html>
