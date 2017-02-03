@@ -8,7 +8,7 @@
  *	@changelog:
  *	    0.1.x     - basic functionality
  *			0.1.1 - public folder added
- *			0.1.2 - websockets added
+ *			0.1.2 - websockets added 
  *			0.1.3 - server authetification added
  *			0.1.4 - client authentification added
  *			0.1.5 - data file proxy added
