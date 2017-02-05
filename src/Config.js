@@ -51,20 +51,21 @@ config={
 		} 
 		
 	},
-	"ScheduledCommands":[         //commands to be executed at a certain time (not implremented yet)
-		{
-			"Target":"All",
-			"Time":"5:15",
-			"Command":"CECOnOff",
-			"Params":["On"]
-		},
-		{
-			"Target":"All",
-			"Time":"17:51",
-			"Command":"CECOnOff",
-			"Params":["Off"]
-		}
-	],
+	"Presentations":{        //Presentations to be shown after a period of time
+  		"ClientTest2":{
+  			"Interval":4000,
+  			"TimeStart":-1, //TODO: TimeStart to be implemented
+  			"TimeEnd":-1, //TODO: TimeEnd to be implemented
+			"Url":{
+				"Path":"/slideTemplate.html",
+				"Params":{
+					'id':'1DOeyOhWo9hjwJDhcMJLW8Kb2kA9SEHAGcuSOLNV9sKU',
+					'iterations':2,
+					'delay':1000
+				}
+			}
+		} 
+	},
 	"Keyboard":{                 //association between keycodes and resource a client shall get as answer
 		"32": {"Path":"/multiplePlanTemplate.html","Params":{'db':'./lehrerPlan.json','index1':0,'filter':'And','timeout':5000}},
 		"33": {"Path":"/multiplePlanTemplate.html","Params":{'db':'./lehrerPlan.json','index1':0,'filter':'BS','timeout':5000}},

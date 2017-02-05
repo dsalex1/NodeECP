@@ -2,7 +2,7 @@
  *
  *	@file: Main.js
  *	@author: dsalex1 
- *	@version: alpha 0.2.4-0201
+ *	@version: alpha 0.3.1-0219
  *  @snapshot: false
  *  @autoincrement: true
  *	@changelog:
@@ -19,6 +19,8 @@
  *			0.2.2 - extracted further config
  *			0.2.3 - basic documentation 
  *			0.2.4 - auto build numbering, build number set to 200
+ *		0.3.x     - presentations
+ *		    0.3.1 - basic functionality
  *	@about: main server file handling client authentification, incoming requests,
  *			redirection and database access.
  */
@@ -30,7 +32,6 @@ var https = require('https'); //used to create the main server object
 var path = require('path'); //used to pass paths as objects 
 var express = require('express'); //used to serve public folders via https
 var http = require('http'); //used to accquire files to check for changes
-var querystring = require('querystring'); //used to decode query strings
 var fs = require('fs'); //used to import *.js files and to supply files
 eval(fs.readFileSync('Config.js')+'');//import main configuration
 eval(fs.readFileSync('Strings.js')+'');//import main strings
@@ -56,7 +57,6 @@ var options = {
 var app = express();
 var server = https.createServer(options, app);
 var io = require('socket.io')(server);//set up socket io to transmit data back to client
-
 //######################end of instanciate main Server##########################################
 
 
@@ -70,11 +70,18 @@ app.get('/', function(req, res){//accessing root
     if(req.client.authorized){
 	 
 	    var subject = req.connection.getPeerCertificate().subject;
-		try{ //try to fetch default view path for client subject.CN and redirect there
-		    entry = config["Clients"][subject.CN];
-		    res.writeHead(302, {'Location': (entry["Path"]+"?"+querystring.stringify(entry["Params"]))});
+		if (config["Clients"][subject.CN]!=undefined){ //try to fetch default view path for client subject.CN and redirect there
+			ClientPath=config["Clients"][subject.CN]["Path"];
+			ClientQuery=config["Clients"][subject.CN]["Params"];
+			if (config["Presentations"][subject.CN]!=undefined){ //see if there's a presentation scheduled and if so append params to query
+				params=config["Presentations"][subject.CN]
+				if (typeof params["Url"]== typeof {})
+					params["Url"]=params["Url"]["Path"]+"?"+recurQueryStringify(params["Url"]["Params"]);
+				ClientQuery=Object.assign(ClientQuery,config["Presentations"][subject.CN]);
+			}
+		    res.writeHead(302, {'Location': (ClientPath+"?"+recurQueryStringify(ClientQuery))});
 		    res.end(); 
-	    }catch(err){ //if we ran into an error tell the client 
+	    }else{ //if the client is unknown to us tell the client 
 		    res.send(CLIENT_CN_UNKNOWN_ERR(subject.CN));
 		}
 	// NOT AUTHORIZED
@@ -86,7 +93,7 @@ app.get('/', function(req, res){//accessing root
 app.get('/keypress', function (req, res) {
 	try{  //try to fetch default view path for client subject.CN and redirect there
 	    entry=config["Keyboard"][""+req.query.keycode];
-		    res.writeHead(302, {'Location': (entry["Path"]+"?"+querystring.stringify(entry["Params"]))});
+		    res.writeHead(302, {'Location': (entry["Path"]+"?"+recurQueryStringify(entry["Params"]))});
 		    res.end(); 
     }catch(err){  //if we ran into an error tell the client 
 	    res.send(NO_ASSINGMENT_FOR_KEYCODE_ERR(req.query.keycode))
@@ -94,14 +101,15 @@ app.get('/keypress', function (req, res) {
 });
 
 //##########proxi file thru#########
-app.get('/schuelerPlan.json', function(req, res){
-// AUTHORIZED 
+
+app.get(/\/(lehrer|schueler)Plan\.json/, function(req, res){
+	// AUTHORIZED 
     if(req.client.authorized){
 	    var externalReq = http.request({
 	        hostname: "www.plaene.iks.bullencode.de",
-	        path: "/json/schuelerPlan.json"
+	        path: "/json"+req.url
 	    }, function(externalRes) {
-	        externalRes.pipe(res); //pipe the data recieved from bullencode to the client requesting the db 
+	        externalRes.pipe(res);
 	    });
 	    externalReq.end();
 	
@@ -111,12 +119,12 @@ app.get('/schuelerPlan.json', function(req, res){
     }
 });
 
-app.get('/lehrerPlan.json', function(req, res){
+app.get('(/static)?/presentation/*', function(req, res){
 	// AUTHORIZED 
-    if(req.client.authorized){
-	    var externalReq = http.request({
-	        hostname: "www.plaene.iks.bullencode.de",
-	        path: "/json/lehrerPlan.json"
+    if(req.client.authorized){ 
+	    var externalReq = https.request({
+	        hostname: "docs.google.com",
+	        path: req.url
 	    }, function(externalRes) {
 	        externalRes.pipe(res);
 	    });

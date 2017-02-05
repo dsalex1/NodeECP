@@ -136,7 +136,7 @@
 			</div>
 			
 			<div class="row content"> 
-				<div ng-include="'./planViewTemplate.html'"   ng-repeat="plan in planctrl.data" ><div>
+				<div ng-include="'./planViewTemplate.html'"   ng-repeat="plan in planctrl.data" ></div>
 			</div>
 			
 			<div class="row footer" ng-hide="plan.footer===undefined || plan.footer.length===0" ng-controller="footerController as plan">

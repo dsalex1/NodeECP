@@ -60,3 +60,16 @@ buildLog=function(){
 	});
 }
 
+var querystring = require('querystring'); //used to decode query strings
+
+recurQueryStringify=function(obj){
+	for (var key in obj) {
+	  if (obj.hasOwnProperty(key)) {
+	    if (typeof obj[key]== typeof {}){
+	    	obj[key]=recurQueryStringify(obj[key])
+	    }
+	  }
+	}
+	return querystring.stringify(obj);
+}
+

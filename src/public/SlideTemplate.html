@@ -1,0 +1,93 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+	    <title>ECP Test1</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+		<script>
+			function getParameterByName(name, url) {
+				if (!url) {
+				  url = window.location.href;
+				}
+				name = name.replace(/[\[\]]/g, "\\$&");
+				var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+					results = regex.exec(url);
+				if (!results) return null;
+				if (!results[2]) return '';
+				return decodeURIComponent(results[2].replace(/\+/g, " "));
+			}
+			
+			var myApp = angular.module('Slideview', []);
+
+			myApp.controller('presController', ['$scope', function($scope) {
+				$scope.id=getParameterByName("id");
+				$scope.delay=getParameterByName("delay");
+				$scope.url="./presentation/d/"+$scope.id+"/embed?start=true&loop=true&delayms="+$scope.delay; 
+			}]);
+			
+			$(document).bind('keyup', function (e) {
+				console.log(e.keyCode);
+				window.location.replace("./keypress?keycode="+e.keyCode);
+			});
+			
+			window.MutationObserver = window.MutationObserver
+				|| window.WebKitMutationObserver
+				|| window.MozMutationObserver;
+			// Find the element that you want to "watch"
+			iterationsPass=0;
+			
+			window.onload = function () { 
+				//while(true){
+					try{
+						var target = document.getElementById('slideshow').contentWindow.document.getElementsByClassName('punch-viewer-nav')[0].getElementsByTagName("div")[0];
+					}catch(err){
+						console.log("ERROR while targeting")
+						setTimeout(function(){ 
+							window.onload()
+						}, 100);
+						return;
+					}					
+				//}
+				observer = new MutationObserver(function(mutation) {
+					console.log(mutation)
+					if (mutation.length==4){ /**TODO: observed behavior, 4 mutations on target are made once the presentation has finished - replace by more stable approach**/ 
+						iterationsPass=iterationsPass+1;
+						console.log(iterationsPass+" out of "+getParameterByName('iterations'))
+						if (getParameterByName('iterations')===""+iterationsPass){
+							window.location.replace("./");
+						}
+					}
+				}),
+				// configuration of the observer:
+				config = {
+					attributes: true // this is to watch for attribute changes.
+				};
+				// pass in the element you wanna watch as well as the options
+				observer.observe(target, config);
+			}
+		</script>
+		<style>
+		html,
+		body {
+		  height: 100%;
+		  margin: 0;
+		  overflow:hidden;
+		}
+		.slidecontainer{
+			height: calc(100% + 28px);
+			width: 100%;
+		}
+		</style>
+	</head>
+	<body ng-app="Slideview" ng-controller="presController">	
+		<div class="slideContainer">
+			<iframe id="slideshow" src="{{url}}" 
+					frameborder="0" width="100%" height="100%" 
+					allowfullscreen="true" mozallowfullscreen="true" 
+					webkitallowfullscreen="true">
+			</iframe>
+			
+			
+		</div>
+	</body>
+</html>

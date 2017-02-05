@@ -8,6 +8,13 @@ $(document).bind('keyup', function (e) {
 	console.log(e.keyCode);
 	window.location.replace("./keypress?keycode="+e.keyCode);
 });
+
+if (getParameterByName("Interval")!=null){
+	setTimeout(function(){ 
+		console.log("redirect to "+getParameterByName("Url"))
+		window.location.replace(getParameterByName("Url") || "./"); // || used as null-coalescing operator
+	}, getParameterByName("Interval"));
+}
 	
   
 function getParameterByName(name, url) {
@@ -21,6 +28,7 @@ function getParameterByName(name, url) {
 	if (!results[2]) return '';
 	return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
+
 
 setTimeout(function(){ 
 	//console.clear();
