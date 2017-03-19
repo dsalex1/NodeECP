@@ -1,4 +1,6 @@
 
+
+
 # NodeECP
 A node.js reimplementation and extension of the school internal subtitution system
 ## Setup
@@ -25,3 +27,5 @@ in order to test this application the following files have to be installed in th
 Google Chrome: https://support.globalsign.com/customer/portal/articles/1211541-install-client-digital-certificate---windows-using-chrome <br/>
 Mozilla Firefox: https://support.globalsign.com/customer/portal/articles/1211486-install-client-digital-certificate---firefox-for-windows <br/>
 Mac OS: https://support.globalsign.com/customer/portal/articles/1214936-install-pkcs-12-file---mac-osx-for-safari-chrome <br/>
+
+the both examples provided in /src/certs/clientCerts ClientTest1.pfx and ClientTest2.pfx use the empty string '' as password.
