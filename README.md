@@ -18,7 +18,7 @@ A node.js reimplementation and extension of the school internal subtitution syst
 |&nbsp;&nbsp;&nbsp;&nbsp;/main.js | main Module |
 |&nbsp;&nbsp;&nbsp;&nbsp;/*.js | other modules  |
 
-in order to test this application the following files have be be installed in the clients certification store:
+in order to test this application the following files have to be installed in the clients certification store:
 1. /src/certs/clientCerts/ClientTest?.pfx
 2. /src/certs/ServerCert.crt (optionally, only if the issuer's CA isn't already installed by default, like e.g. verisign is)
 
