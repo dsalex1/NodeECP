@@ -3,6 +3,9 @@
 
 # NodeECP
 A node.js reimplementation and extension of the school internal subtitution system
+
+![alt text](https://i.gyazo.com/69eb1a04aafad8cc7db37f5b7a0d6cb9.png " ")
+
 ## Setup
 #### src outline:
 |Path |Usage/Explanation |
